@@ -16,14 +16,13 @@ def main():
     root.resizable(width=False, height=False)
 
     image = Image.new('RGB', (WIDTH, HEIGHT))
+    draw = ImageDraw.Draw(image)
     label = tk.Label(root)
 
     points = []
     for i in range(8):
         s = format(i, "03b")  # Zero-padded binary representation of i.
         points.append(Vector([float(d) - 0.5 for d in s]))
-
-    draw = ImageDraw.Draw(image)
 
     stop = []
     root.protocol("WM_DELETE_WINDOW", lambda: stop.append(0))
