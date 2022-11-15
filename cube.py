@@ -10,12 +10,13 @@ THICKNESS = 6
 DISTANCE = 2
 CENTER = Vector([WIDTH / 2, HEIGHT / 2])
 
+
 def main():
     root = tk.Tk()
     root.title("Cube")
     root.resizable(width=False, height=False)
 
-    image = Image.new('RGB', (WIDTH, HEIGHT))
+    image = Image.new("RGB", (WIDTH, HEIGHT))
     draw = ImageDraw.Draw(image)
     label = tk.Label(root)
 
@@ -44,7 +45,7 @@ def main():
 
 
 def draw_cube(points, image, angle):
-    image.rectangle((0, 0, WIDTH, HEIGHT), 0) # Clear screen.
+    image.rectangle((0, 0, WIDTH, HEIGHT), 0)  # Clear screen.
 
     cos, sin = math.cos(angle), math.sin(angle)
     rx = Matrix([[1, 0, 0], [0, cos, -sin], [0, sin, cos]])

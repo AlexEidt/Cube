@@ -10,12 +10,13 @@ THICKNESS = 6
 DISTANCE = 2
 CENTER = Vector([WIDTH / 2, HEIGHT / 2])
 
+
 def main():
     root = tk.Tk()
     root.title("Tesseract")
     root.resizable(width=False, height=False)
 
-    image = Image.new('RGB', (WIDTH, HEIGHT))
+    image = Image.new("RGB", (WIDTH, HEIGHT))
     draw = ImageDraw.Draw(image)
     label = tk.Label(root)
 
@@ -44,12 +45,12 @@ def main():
 
 
 def draw_tesseract(points, image, angle):
-    image.rectangle((0, 0, WIDTH, HEIGHT), 0) # Clear screen.
+    image.rectangle((0, 0, WIDTH, HEIGHT), 0)  # Clear screen.
 
     cos, sin = math.cos(angle), math.sin(angle)
     rxy = Matrix([[cos, -sin, 0, 0], [sin, cos, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
     rzw = Matrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, cos, -sin], [0, 0, sin, cos]])
-    rx = Matrix([[1, 0, 0], [0, 0, -1], [0, 1, 0]]) # PI / 2 Rotation about X-axis
+    rx = Matrix([[1, 0, 0], [0, 0, -1], [0, 1, 0]])  # PI / 2 Rotation about X-axis
 
     rotation = rxy * rzw
 
@@ -82,7 +83,9 @@ def draw_tesseract(points, image, angle):
         image.line((*projected[i], *projected[i + 2]), fill=COLOR, width=THICKNESS)
         image.line((*projected[i + 8], *projected[i + 10]), fill=COLOR, width=THICKNESS)
         image.line((*projected[i + 4], *projected[i + 6]), fill=COLOR, width=THICKNESS)
-        image.line((*projected[i + 12], *projected[i + 14]), fill=COLOR, width=THICKNESS)
+        image.line(
+            (*projected[i + 12], *projected[i + 14]), fill=COLOR, width=THICKNESS
+        )
 
     for i in range(8):
         image.line((*projected[i], *projected[i + 8]), fill=COLOR, width=THICKNESS)
