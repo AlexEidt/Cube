@@ -7,6 +7,7 @@ WIDTH = 640
 HEIGHT = 360
 COLOR = (57, 255, 20)
 THICKNESS = 3
+CENTER = Vector([WIDTH / 2, HEIGHT / 2])
 
 def main():
     root = tk.Tk()
@@ -43,6 +44,8 @@ def main():
 
 
 def draw_tesseract(points, image, angle):
+    image.rectangle((0, 0, WIDTH, HEIGHT), 0) # Clear screen.
+
     cos, sin = math.cos(angle), math.sin(angle)
     rxy = Matrix([[cos, -sin, 0, 0], [sin, cos, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
     rzw = Matrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, cos, -sin], [0, 0, sin, cos]])
@@ -66,35 +69,24 @@ def draw_tesseract(points, image, angle):
         projection = Matrix([[z, 0, 0], [0, z, 0]])
         projected_2d = projection * projected_3d
 
-        projected.append(projected_2d * WIDTH)
-
-    image.rectangle((0, 0, WIDTH, HEIGHT), 0) # Clear screen.
+        projected.append(projected_2d * WIDTH + CENTER)
 
     for i in range(4):
-        connect(projected[i], projected[i + 4], image)
-        connect(projected[i + 8], projected[i + 12], image)
+        image.line((*projected[i], *projected[i + 4]), fill=COLOR, width=THICKNESS)
+        image.line((*projected[i + 8], *projected[i + 12]), fill=COLOR, width=THICKNESS)
 
     for i in range(0, 8, 2):
-        connect(projected[i], projected[i + 1], image)
-        connect(projected[i + 8], projected[i + 9], image)
+        image.line((*projected[i], *projected[i + 1]), fill=COLOR, width=THICKNESS)
+        image.line((*projected[i + 8], *projected[i + 9]), fill=COLOR, width=THICKNESS)
 
     for i in range(2):
-        connect(projected[i], projected[i + 2], image)
-        connect(projected[i + 8], projected[i + 10], image)
-        connect(projected[i + 4], projected[i + 6], image)
-        connect(projected[i + 12], projected[i + 14], image)
+        image.line((*projected[i], *projected[i + 2]), fill=COLOR, width=THICKNESS)
+        image.line((*projected[i + 8], *projected[i + 10]), fill=COLOR, width=THICKNESS)
+        image.line((*projected[i + 4], *projected[i + 6]), fill=COLOR, width=THICKNESS)
+        image.line((*projected[i + 12], *projected[i + 14]), fill=COLOR, width=THICKNESS)
 
     for i in range(8):
-        connect(projected[i], projected[i + 8], image)
-
-
-def connect(v1, v2, image):
-    x1, y1 = v1
-    x2, y2 = v2
-    x1, x2 = x1 + WIDTH / 2, x2 + WIDTH / 2
-    y1, y2 = y1 + HEIGHT / 2, y2 + HEIGHT / 2
-    
-    image.line((x1, y1, x2, y2), fill=COLOR, width=THICKNESS)
+        image.line((*projected[i], *projected[i + 8]), fill=COLOR, width=THICKNESS)
 
 
 if __name__ == "__main__":

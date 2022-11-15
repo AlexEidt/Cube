@@ -19,6 +19,13 @@ class Vector:
     def w(self):
         return self.data[3]
 
+    def __add__(self, other):
+        vector = Vector([0] * self.dims)
+        for i in range(self.dims):
+            vector[i] = self.__getitem__(i) + other[i]
+
+        return vector
+
     def __mul__(self, other):
         vector = Vector(self.data)
         for i in range(vector.dims):
