@@ -6,7 +6,8 @@ from linalg import Vector, Matrix
 WIDTH = 640
 HEIGHT = 360
 COLOR = (57, 255, 20)
-THICKNESS = 3
+THICKNESS = 6
+DISTANCE = 2
 CENTER = Vector([WIDTH / 2, HEIGHT / 2])
 
 def main():
@@ -40,7 +41,7 @@ def main():
         root.update_idletasks()
         root.update()
 
-        angle += 0.004
+        angle += 0.002
 
 
 def draw_cube(points, image, angle):
@@ -55,8 +56,8 @@ def draw_cube(points, image, angle):
     cube = []
     for vector in points:
         rotated = rotation * vector
-        dist = 2
-        z = 1 / (dist - rotated.z)
+
+        z = 1 / (DISTANCE - rotated.z)
         projection = Matrix([[z, 0, 0], [0, z, 0]])
         cube.append((projection * rotated) * (WIDTH / 2) + CENTER)
 

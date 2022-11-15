@@ -6,7 +6,8 @@ from linalg import Vector, Matrix
 WIDTH = 640
 HEIGHT = 360
 COLOR = (57, 255, 20)
-THICKNESS = 3
+THICKNESS = 6
+DISTANCE = 2
 CENTER = Vector([WIDTH / 2, HEIGHT / 2])
 
 def main():
@@ -57,15 +58,14 @@ def draw_tesseract(points, image, angle):
     projected = []
     for vector in points:
         rotated = rotation * vector
-        dist = 2.0
 
         # 4-D to 3-D projection.
-        w = 1 / (dist - rotated.w)
+        w = 1 / (DISTANCE - rotated.w)
         projection = Matrix([[w, 0, 0, 0], [0, w, 0, 0], [0, 0, w, 0]])
         projected_3d = rx * (projection * rotated)
 
         # 3-D to 2-D projection.
-        z = 1 / (dist - projected_3d.z)
+        z = 1 / (DISTANCE - projected_3d.z)
         projection = Matrix([[z, 0, 0], [0, z, 0]])
         projected_2d = projection * projected_3d
 
