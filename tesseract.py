@@ -83,9 +83,7 @@ def draw_tesseract(points, image, angle):
         image.line((*projected[i], *projected[i + 2]), fill=COLOR, width=THICKNESS)
         image.line((*projected[i + 8], *projected[i + 10]), fill=COLOR, width=THICKNESS)
         image.line((*projected[i + 4], *projected[i + 6]), fill=COLOR, width=THICKNESS)
-        image.line(
-            (*projected[i + 12], *projected[i + 14]), fill=COLOR, width=THICKNESS
-        )
+        image.line((*projected[i + 12], *projected[i + 14]), fill=COLOR, width=THICKNESS)
 
     for i in range(8):
         image.line((*projected[i], *projected[i + 8]), fill=COLOR, width=THICKNESS)
