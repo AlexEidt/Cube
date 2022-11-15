@@ -1,27 +1,25 @@
-
 import tkinter as tk
 import numpy as np
 import cv2
 from PIL import Image, ImageTk
-from matrix import Vector, Matrix
+from linalg import Vector, Matrix
 
 WIDTH = 640
 HEIGHT = 360
-
+COLOR = (57, 255, 20)
+THICKNESS = 3
 
 def main():
     root = tk.Tk()
-    root.title('Cube')
+    root.title("Cube")
     root.resizable(width=False, height=False)
 
     image = np.zeros((HEIGHT, WIDTH, 3), dtype=np.uint8)
-    frame_image = ImageTk.PhotoImage(Image.fromarray(image))
-    label = tk.Label(root, image=frame_image)
-    label.pack()
+    label = tk.Label(root, image=ImageTk.PhotoImage(image=Image.fromarray(image)))
 
     points = []
     for i in range(8):
-        s = format(i, '03b')
+        s = format(i, "03b")  # Zero-padded binary representation of i.
         points.append(Vector([float(d) - 0.5 for d in s]))
 
     angle = 0.0
@@ -29,7 +27,7 @@ def main():
         cube(points, image, label, angle)
         root.update_idletasks()
         root.update()
-        angle += 0.001
+        angle += 0.004
 
 
 def cube(points, image, label, angle):
@@ -45,42 +43,34 @@ def cube(points, image, label, angle):
         dist = 2
         z = 1 / (dist - rotated.z)
         projection = Matrix([[z, 0, 0], [0, z, 0]])
-        projected.append((projection * rotated) * 300)
+        projected.append((projection * rotated) * (WIDTH / 2))
 
-    image[:] = 0
+    image[:] = 0  # Clear screen.
 
-    connect(0, 4, projected, image)
-    connect(1, 5, projected, image)
-    connect(2, 6, projected, image)
-    connect(3, 7, projected, image)
+    for i in range(4):
+        connect(projected[i], projected[i + 4], image)
 
-    connect(0, 1, projected, image)
-    connect(2, 3, projected, image)
-    connect(4, 5, projected, image)
-    connect(6, 7, projected, image)
+    for i in range(0, 8, 2):
+        connect(projected[i], projected[i + 1], image)
 
-    connect(0, 2, projected, image)
-    connect(1, 3, projected, image)
-    connect(4, 6, projected, image)
-    connect(5, 7, projected, image)
+    for i in range(2):
+        connect(projected[i], projected[i + 2], image)
+        connect(projected[i + 4], projected[i + 6], image)
 
-    update(image, label)
-
-
-def connect(i, j, arr, image):
-    a = int(arr[i].x) + WIDTH // 2
-    b = int(arr[i].y) + HEIGHT // 2
-    c = int(arr[j].x) + WIDTH // 2
-    d = int(arr[j].y) + HEIGHT // 2
-    cv2.line(image, (a, b), (c, d), (57, 255, 20), 2)
-
-
-def update(image, label):
+    # Update screen.
     frame_image = ImageTk.PhotoImage(image=Image.fromarray(image))
     label.configure(image=frame_image)
     label.image = frame_image
     label.pack()
 
 
-if __name__ == '__main__':
+def connect(v1, v2, image):
+    x1, y1 = v1
+    x2, y2 = v2
+    x1, x2 = x1 + WIDTH / 2, x2 + WIDTH / 2
+    y1, y2 = y1 + HEIGHT / 2, y2 + HEIGHT / 2
+    cv2.line(image, (int(x1), int(y1)), (int(x2), int(y2)), COLOR, THICKNESS)
+
+
+if __name__ == "__main__":
     main()
