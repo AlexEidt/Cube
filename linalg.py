@@ -20,18 +20,36 @@ class Vector:
         return self.data[3]
 
     def __add__(self, other):
-        vector = Vector([0] * self.dims)
-        for i in range(self.dims):
-            vector[i] = self.__getitem__(i) + other[i]
+        if type(other) in (int, float):
+            vector = Vector(self.data)
+            for i in range(self.dims):
+                vector[i] *= other
+            return vector
+        elif type(other) == Vector:
+            assert self.dims == other.dims, f'{self.dims} != {other.dims}'
 
-        return vector
+            vector = Vector(self.data)
+            for i in range(self.dims):
+                vector[i] = self.__getitem__(i) + other[i]
+            return vector
+
+        return None
 
     def __mul__(self, other):
-        vector = Vector(self.data)
-        for i in range(vector.dims):
-            vector[i] *= other
+        if type(other) in (int, float):
+            vector = Vector(self.data)
+            for i in range(vector.dims):
+                vector[i] *= other
+            return vector
+        elif type(other) == Vector:
+            assert self.dims == other.dims, f'{self.dims} != {other.dims}'
 
-        return vector
+            vector = Vector(self.data)
+            for i in range(vector.dims):
+                vector[i] *= other[i]
+            return vector
+
+        return None
 
     def __setitem__(self, key, value):
         self.data[key] = value
@@ -55,18 +73,14 @@ class Matrix:
     def __mul__(self, other):
 
         if type(other) == Matrix:
-            assert (
-                self.cols == other.rows
-            ), f"{self.rows}x{self.cols} {other.rows}x{other.cols}"
+            assert self.cols == other.rows, f"{self.rows}x{self.cols} {other.rows}x{other.cols}"
 
             matrix = Matrix([[0 for _ in range(other.cols)] for _ in range(self.rows)])
             for i in range(matrix.rows):
                 for j in range(matrix.cols):
                     for k in range(self.cols):
                         matrix[i, j] += self.__getitem__((i, k)) * other[k, j]
-
             return matrix
-
         elif type(other) == Vector:
             assert self.cols == other.dims, f"{self.rows}x{self.cols} {other.dims}x1"
 
@@ -74,7 +88,6 @@ class Matrix:
             for i in range(self.rows):
                 for j in range(self.cols):
                     vector[i] += self.__getitem__((i, j)) * other[j]
-
             return vector
 
         return None
