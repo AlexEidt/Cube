@@ -71,7 +71,6 @@ class Matrix:
         self.data = data.copy()
 
     def __mul__(self, other):
-
         if type(other) == Matrix:
             assert self.cols == other.rows, f"{self.rows}x{self.cols} {other.rows}x{other.cols}"
 
