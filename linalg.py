@@ -68,13 +68,13 @@ class Matrix:
     def __init__(self, data):
         self.rows = len(data)
         self.cols = len(data[0])
-        self.data = data.copy()
+        self.data = [row[:] for row in data]
 
     def __mul__(self, other):
         if type(other) == Matrix:
             assert self.cols == other.rows, f"{self.rows}x{self.cols} {other.rows}x{other.cols}"
 
-            matrix = Matrix([[0 for _ in range(other.cols)] for _ in range(self.rows)])
+            matrix = Matrix([[0] * other.cols for _ in range(self.rows)])
             for i in range(matrix.rows):
                 for j in range(matrix.cols):
                     for k in range(self.cols):
@@ -83,7 +83,7 @@ class Matrix:
         elif type(other) == Vector:
             assert self.cols == other.dims, f"{self.rows}x{self.cols} {other.dims}x1"
 
-            vector = Vector([0 for i in range(self.rows)])
+            vector = Vector([0] * self.rows)
             for i in range(self.rows):
                 for j in range(self.cols):
                     vector[i] += self.__getitem__((i, j)) * other[j]

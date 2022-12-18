@@ -6,7 +6,7 @@ from linalg import Vector, Matrix
 WIDTH = 640
 HEIGHT = 360
 COLOR = (57, 255, 20)
-THICKNESS = 6
+THICKNESS = 4
 DISTANCE = 2
 CENTER = Vector([WIDTH / 2, HEIGHT / 2])
 
